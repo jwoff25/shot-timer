@@ -26,12 +26,14 @@ class Timer():
         self.results = []
         # UI CODE
         # timer and buttons
-        self.timer_label = Label(root, text="00.00")
+        self.timer_frame = Frame(root)
+        self.timer_label = Label(self.timer_frame, text="00.00")
         self.timer_label.pack()
-        self.start_button = Button(root, text="Start", command=self.start_timer)
+        self.start_button = Button(self.timer_frame, text="Start", command=self.start_timer)
         self.start_button.pack()
-        self.stop_button = Button(root, text="Stop", command=self.stop_timer)
+        self.stop_button = Button(self.timer_frame, text="Stop", command=self.stop_timer)
         self.stop_button.pack()
+        self.timer_frame.pack()
         # table for results
         label_width = 5
         result_width = 15
@@ -91,9 +93,10 @@ class Timer():
 
     def sensor_has_been_hit(self):
         out = self.device.readline().decode().rstrip()
-        print(int(out))
-        if int(out) > 0:
-            return True
+        print("Serial output: {0}".format(out))
+        if out == "1" or out == "0":
+            if int(out) > 0:
+                return True
         return False
 
     def clear_values(self):
@@ -102,8 +105,9 @@ class Timer():
         self.init_serial_device()
 
     def set_result(self):
-        row_number = len(self.results) + 1
         total = self.get_total_time()
+        self.timer_label.config(text="{:.2f}".format(total))
+        row_number = len(self.results) + 1
         if row_number == 1:
             self.row_1_result.config(text="{:.2f}".format(total))
         elif row_number == 2:
@@ -145,10 +149,10 @@ class Timer():
     def timer_loop(self):
         if self.running:
             self.end_time = time.time()
-            print(self.get_total_time())
+            total_time = self.get_total_time()
+            print(total_time)
             if self.sensor_has_been_hit():
                 self.stop_timer()
-                self.timer_label.config(text="{:.2f}".format(self.get_total_time()))
                 self.set_result()
             else:
                 self.root.after(TICK_RATE, self.timer_loop)
