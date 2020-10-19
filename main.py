@@ -3,7 +3,6 @@ from tkinter import Tk, Label, Button, Frame
 import serial.tools.list_ports
 import time
 from playsound import playsound
-from threading import Thread
 
 BAUD_RATE = 115200
 TICK_RATE = 1
@@ -12,6 +11,7 @@ TICK_RATE = 1
 class Timer():
     def __init__(self, root):
         self.root = root
+        self.root.bind('<space>', self.start_timer)
         # timers
         self.start_time = 0
         self.end_time = 0
@@ -20,7 +20,8 @@ class Timer():
         self.serial_port = None
         self.device = None
         # set serial port
-        self.set_serial_port('/dev/cu.usbmodem1432301')
+        if not self.set_serial_port():
+            exit(1)
         self.init_serial_device()
         # results
         self.results = []
@@ -73,14 +74,21 @@ class Timer():
             print(e)
             exit(1)
 
-    def set_serial_port(self, port_name):
-        self.serial_port = port_name
+    def set_serial_port(self):
+        ports = list(serial.tools.list_ports.comports())
+        for p in ports:
+            if "Generic CDC" in p.description:
+                self.serial_port = p.device
+                return True
+        return False
 
     @staticmethod
     def play_beep():
         playsound('./beep.mp3')
 
-    def start_timer(self):
+    def start_timer(self, event=None):
+        if self.running:
+            return
         self.running = True
         self.root.after(3000, self.execute)
 
