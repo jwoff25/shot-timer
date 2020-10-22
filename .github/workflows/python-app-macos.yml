@@ -34,7 +34,7 @@ jobs:
     - name: Create a build for MacOS using py2app
       run: |
         python setup_mac.py py2app
-        chmod +x /Users/runner/work/shot-timer/shot-timer/dist/ShotTimer.app/Contents/MacOS/*
+        zip build.zip /Users/runner/work/shot-timer/shot-timer/dist/ShotTimer.app
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.0
       with:
