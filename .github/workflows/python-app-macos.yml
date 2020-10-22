@@ -33,7 +33,8 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Create a build for MacOS using py2app
       run: |
-        python setup_mac.py py2app 
+        python setup_mac.py py2app
+        chmod +x /Users/runner/work/shot-timer/shot-timer/dist/ShotTimer.app/Contents/MacOS/*
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.0
       with:

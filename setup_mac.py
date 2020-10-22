@@ -12,6 +12,7 @@ DATA_FILES = [('files', ['files/beep.mp3'])]
 OPTIONS = {}
 
 setup(
+    name="ShotTimer",
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
