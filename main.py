@@ -2,10 +2,14 @@ import serial
 from tkinter import Tk, Label, Button, Frame
 import serial.tools.list_ports
 import time
+import os
+import sys
 from playsound import playsound
 
 BAUD_RATE = 115200
 TICK_RATE = 1
+# SOUND_FILE = os.path.join(sys.__MEIPASS, "files/beep.mp3") if getattr(sys, 'frozen', False) else "files/beep.mp3"
+SOUND_FILE = "files/beep.mp3"
 
 
 class Timer():
@@ -84,7 +88,7 @@ class Timer():
 
     @staticmethod
     def play_beep():
-        playsound('./beep.mp3')
+        playsound(SOUND_FILE)
 
     def start_timer(self, event=None):
         if self.running:
