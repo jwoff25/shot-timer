@@ -3,6 +3,7 @@ from tkinter import Tk, Label, Button, Frame
 import serial.tools.list_ports
 import time
 from playsound import playsound
+import sys
 
 BAUD_RATE = 115200
 TICK_RATE = 1
@@ -22,7 +23,7 @@ class Timer():
         self.device = None
         # set serial port
         if not self.set_serial_port():
-            exit(1)
+            sys.exit(1)
         self.init_serial_device()
         # results
         self.results = []
@@ -73,7 +74,7 @@ class Timer():
             self.device = serial.Serial(self.serial_port, BAUD_RATE)
         except serial.SerialException as e:
             print(e)
-            exit(1)
+            sys.exit(1)
 
     def set_serial_port(self):
         ports = list(serial.tools.list_ports.comports())
